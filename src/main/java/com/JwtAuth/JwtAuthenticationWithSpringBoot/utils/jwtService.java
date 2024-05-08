@@ -21,10 +21,16 @@ public class jwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public String generateToken(EmployeeModel user) {
+    public String generateAccessToken(EmployeeModel user) {
 //        System.out.println("generate token public");
-        return generateToken(new HashMap<>(), user);
+        return generateAccessToken(new HashMap<>(), user);
     }
+
+    public String generateRefreshToken(EmployeeModel user) {
+//        System.out.println("generate token public");
+        return generateRefreshToken(new HashMap<>(), user);
+    }
+
     public boolean isTokenValid(String token) {
 //        final String employeeName = extractEmployee_name(token);
 //        System.out.println("in isvalidtoken function public");
@@ -40,7 +46,7 @@ public class jwtService {
         return claimsResolvers.apply(claims);
     }
 
-    private String generateToken(Map<String, Object> extraClaims, EmployeeModel user) {
+    private String generateAccessToken(Map<String, Object> extraClaims, EmployeeModel user) {
 //        System.out.println("generate token private");
 //        System.out.println("Date(System.currentTimeMillis()) "+ new Date(System.currentTimeMillis()));
 //        System.out.println("new Date(System.currentTimeMillis() + 60000) "+new Date(System.currentTimeMillis() + 5000));
@@ -49,6 +55,14 @@ public class jwtService {
         return Jwts.builder().setClaims(extraClaims).setSubject(user.getEmployee_name())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 3600000))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256).compact();
+    }
+
+    private String generateRefreshToken(Map<String, Object> extraClaims, EmployeeModel user) {
+        return Jwts.builder()
+                .setSubject(user.getEmployee_name())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 24 * 3600000))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256).compact();
     }
 

@@ -19,9 +19,10 @@ public class AuthenticationService {
         EmployeeModel employeeDetails = employeeService.getEmployeeDetailsByEmployeeCode(employeeCode, password);
 
         if (employeeDetails != null && password.equals(employeeDetails.getEmployee_pass())) {
-            String token = jwtservice.generateToken(employeeDetails);
+            String acessstoken = jwtservice.generateAccessToken(employeeDetails);
+            String refreshtoken = jwtservice.generateRefreshToken(employeeDetails);
 
-            return new LoginResponse(token, employeeDetails);
+            return new LoginResponse(acessstoken , refreshtoken, employeeDetails);
         } else {
             return null;
         }

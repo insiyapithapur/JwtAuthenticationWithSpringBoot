@@ -5,11 +5,13 @@ import lombok.Data;
 
 @Data
 public class LoginResponse {
-    private String token;
+    private String acesstoken;
     private EmployeeModel employeeDetails;
+    private String refreshtoken;
 
-    public LoginResponse(String token, EmployeeModel employeeDetails) {
-        this.token = token;
+    public LoginResponse(String acesstoken, String refreshtoken , EmployeeModel employeeDetails) {
+        this.acesstoken = acesstoken;
         this.employeeDetails = employeeDetails;
+        this.refreshtoken = refreshtoken;
     }
 }
